@@ -1,6 +1,7 @@
 library(tidyverse)
 library(tidytext)
 library(topicmodels)
+library(gridExtra)
 
 ##http://tidytextmining.com/topicmodeling.html
 
@@ -19,17 +20,46 @@ scopus1 <- scopus %>%
   ungroup()
 
 
-#a stupid chart. need to work on this..
+#most frequent terms from titles over time
 
 top <- scopus1 %>%
   group_by(Year)%>%
+  arrange(desc(Year), desc(n)) %>%
   top_n(n = 10, n)
-  
 
-ggplot(top, aes(word, fill = n)) + geom_bar() + 
-  facet_grid( ~ Year, scales = "free") +
-  coord_flip()
 
+top_2016 <- top %>% 
+  filter(Year == 2016) %>% arrange(n) %>%
+  ggplot(aes(x =reorder(word,n),y = n)) + geom_bar(stat = "identity") +
+  coord_flip() + ggtitle ("Frequent Publication Title Terms, 2016 ")
+
+top_2015 <- top %>% 
+  filter(Year == 2015) %>% arrange(n) %>%
+  ggplot(aes(x =reorder(word,n),y = n)) + geom_bar(stat = "identity") +
+  coord_flip() + ggtitle ("Frequent Publication Title Terms, 2015 ")
+
+top_2014 <- top %>% 
+  filter(Year == 2014) %>% arrange(n) %>%
+  ggplot(aes(x =reorder(word,n),y = n)) + geom_bar(stat = "identity") +
+  coord_flip() + ggtitle ("Frequent Publication Title Terms, 2014 ")
+
+top_2013 <- top %>% 
+  filter(Year == 2013) %>% arrange(n) %>%
+  ggplot(aes(x =reorder(word,n),y = n)) + geom_bar(stat = "identity") +
+  coord_flip() + ggtitle ("Frequent Publication Title Terms, 2013 ")
+
+top_2012 <- top %>% 
+  filter(Year == 2012) %>% arrange(n) %>%
+  ggplot(aes(x =reorder(word,n),y = n)) + geom_bar(stat = "identity") +
+  coord_flip()+ ggtitle ("Frequent Publication Title Terms, 2012 ")
+
+top_2011 <- top %>% 
+  filter(Year == 2011) %>% arrange(n) %>%
+  ggplot(aes(x =reorder(word,n),y = n)) + geom_bar(stat = "identity") +
+  coord_flip()+ ggtitle ("Frequent Publication Title Terms, 2011 ")
+
+
+grid.arrange(top_2016, top_2015, top_2014, top_2013, nrow = 2)
 
 ##treemap
 
