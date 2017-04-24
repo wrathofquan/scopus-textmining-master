@@ -23,10 +23,9 @@ scopus1 <- scopus %>%
 #most frequent terms from titles over time
 
 top <- scopus1 %>%
-  group_by(Year)%>%
+  group_by(Year)%>% 
   arrange(desc(Year), desc(n)) %>%
-  top_n(n = 10, n)
-
+  top_n(5)
 
 top_2016 <- top %>% 
   filter(Year == 2016) %>% arrange(n) %>%
@@ -72,7 +71,7 @@ map.market(id=top$Year, area=top$n, group=top$word, color=top$n, main = "Tufts S
 # first cast df to 'document term matrix'
 
 scopus1$Year <- as.integer(scopus1$Year)
-scopus_dtm <- scopus1 %>% cast_dtm(Year, word, n)
+scopus_dtm <- scopus1 %>% filter(Year == 5) %>% cast_dtm(Year, word, n)
 
 ## Run LDA
 
