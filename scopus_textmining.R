@@ -4,9 +4,6 @@ library(topicmodels)
 library(gridExtra)
 library(ggthemes)
 
-##http://tidytextmining.com/topicmodeling.html
-
-
 scopus <- read.csv("scopus.csv", stringsAsFactors = FALSE)
 scopus$Year <- as.factor(scopus$Year) 
 
@@ -16,6 +13,8 @@ scopus$Title <- str_replace_all(scopus$Title, "â", "")
 
 #split title characters into its own variable, 'word', remove N/As
 #remove stop words
+stop_words <- add_row(stop_words, word = c("study", "social", "science", "evidence", "systems", "research", "theory", "introduction", "role", "analysis", "based", "nepal", "program", "impact", "action", "understanding", "programs", "model", "academic", "perspective"))
+
 scopus1 <- scopus %>%
   na.omit() %>%
   unnest_tokens(word, Title) %>%
@@ -56,19 +55,6 @@ top_2013 <- top %>%
   coord_flip() + ggtitle ("Frequent Publication Title Terms, 2013 ")+
   theme_tufte()
 
-top_2012 <- top %>% 
-  filter(Year == 2012) %>% arrange(n) %>%
-  ggplot(aes(x =reorder(word,n),y = n)) + geom_bar(stat = "identity") +
-  coord_flip()+ ggtitle ("Frequent Publication Title Terms, 2012 ")+
-  theme_tufte()
-
-top_2011 <- top %>% 
-  filter(Year == 2011) %>% arrange(n) %>%
-  ggplot(aes(x =reorder(word,n),y = n)) + geom_bar(stat = "identity") +
-  coord_flip()+ ggtitle ("Frequent Publication Title Terms, 2011 ")+
-  theme_tufte()
-
-
 terms_grid <- grid.arrange(top_2016, top_2015, top_2014, top_2013, nrow = 2)
 
 ##treemap
@@ -80,7 +66,7 @@ map.market(id=top$Year, area=top$n, group=top$word, color=top$n, main = "Tufts S
 #split title characters into its own variable, 'word', remove N/As
 #remove stop words
 
-stop_words <- add_row(stop_words, word = c("study", "research", "theory", "introduction", "role", "analysis", "based"))
+stop_words <- add_row(stop_words, word = c("study", "social", "science", "evidence", "systems", "research", "theory", "introduction", "role", "analysis", "based", "nepal", "program", "impact", "action", "understanding", "programs", "model", "academic", "perspective"))
 
 scopus1 <- scopus %>%
   na.omit() %>%
@@ -96,7 +82,7 @@ scopus_dtm <- scopus1  %>% filter(Year == 6) %>% cast_dtm(Year, word, n)
 
 ## Run LDA
 
-scopus_dtm <- LDA(scopus_dtm, k = 6, control = list(seed = 11091987))
+scopus_dtm <- LDA(scopus_dtm, k = 8, control = list(seed = 11091987))
 
 ## Convert back to DF
 
@@ -104,7 +90,7 @@ scopus_dtm <- tidy(scopus_dtm)
 
 top_terms <- scopus_dtm %>%
   group_by(topic) %>%
-  top_n(4, beta) %>%
+  top_n(3, beta) %>%
   ungroup() %>%
   arrange(topic, -beta)
 
