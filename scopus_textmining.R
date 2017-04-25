@@ -76,7 +76,7 @@ terms_grid <- grid.arrange(top_2016, top_2015, top_2014, top_2013, nrow = 2)
 library(portfolio)
 map.market(id=top$Year, area=top$n, group=top$word, color=top$n, main = "Tufts Social Science, 2011-2017")
 
-
+------------------------------------------------------------------------------------
 #split title characters into its own variable, 'word', remove N/As
 #remove stop words
 
@@ -116,9 +116,3 @@ top_terms <- scopus_dtm %>%
   facet_wrap(~ topic, scales = "free", ncol = 2) +
   coord_flip() + ggtitle("2016 Scopus Social Sciences Titles Processed with LDA.")
 
-#top_terms$topic <- factor(top_terms$topic)
-
-#top_terms %>%
-#  ggplot(aes(topic, beta, color = topic)) +
-#  geom_point(alpha = 0.8, stat = "identity", show.legend = FALSE) +
-#  geom_text(aes(label=term),hjust=0, vjust=0, show.legend = FALSE)
