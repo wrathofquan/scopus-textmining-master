@@ -8,7 +8,7 @@ scopus <- read.csv("scopus.csv", stringsAsFactors = FALSE)
 scopus$Year <- as.factor(scopus$Year) 
 
 require(stringr)
-scopus$Title <- str_replace_all(scopus$Title, "â", "")
+scopus$Title <- str_replace_all(scopus$Title, "Ã¢", "")
 
 
 #split title characters into its own variable, 'word', remove N/As
@@ -84,7 +84,7 @@ scopus_dtm <- scopus1  %>% filter(Year == 6) %>% cast_dtm(Year, word, n)
 
 scopus_dtm <- LDA(scopus_dtm, k = 8, control = list(seed = 11091987))
 
-## Convert back to DF
+## Convert back to Dataframe
 
 scopus_dtm <- tidy(scopus_dtm)
 
